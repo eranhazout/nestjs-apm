@@ -19,6 +19,7 @@ export class ApmInterceptor implements NestInterceptor {
   ): Observable<Response> {
     return next.handle().pipe(
       catchError(error => {
+        this.apmService.setCustomContext(context);
         if (error instanceof HttpException) {
           this.apmService.captureError(error.message);
         } else {
